@@ -1,34 +1,21 @@
-window.onload = function() {
-
+window.onload = function(){
   var lookup = document.querySelector('#lookup');
-  var httpRequest;
+  lookup.addEventListener('click',function(){
 
- 
-  lookup.addEventListener('click', function(element) {
-    element.preventDefault();
+    var searchtxt= document.querySelector('#country').value;
+    var allCountries= document.querySelector('#allCountries').checked;
+    getInfo(searchtxt,allCountries);
+  
+  }, false);
 
-    httpRequest = new XMLHttpRequest();
-    var country = document.querySelector('#country').value;
-    
-    // GET Request
-    var url = "world.php";
-    httpRequest.onreadystatechange = countrySearch;
-    httpRequest.open('POST', url);
-    //setting the Content-Type
-    httpRequest.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-    httpRequest.send('country=' + encodeURIComponent(country) );
-  });
-
-  function countrySearch() {
-    if (httpRequest.readyState === XMLHttpRequest.DONE) {
-      if (httpRequest.status === 200) {
-        var response = httpRequest.responseText;
-        var result = document.querySelector('#result');
-        result.innerHTML = response;
-      } else {
-        alert('There was a problem with the request.');
-      }
+  function getInfo(q,all){
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange= function(){
+      if(this.readyState== 4 && this.status==200)
+        document.getElementById('result').innerHTML=this.responseText;
     }
-  }
-
-};
+    var querystring= "world.php?country="+ q + "&all"+ all;
+    xhttp.open("Get",querystring,true);
+    xhttp.send();
+  } 
+}
